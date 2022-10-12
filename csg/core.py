@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-class Point(object) :
+class Point:
 
     def __init__(self, x, y) :
         self.x, self.y = x, y
@@ -9,26 +9,10 @@ class Point(object) :
     def __str__(self) :
         return "Point(%.6F, %.6f) " % (self.x, self.y)
       
-class Ray(object) :
-    
-    def __init__(self, origin, direction) :
-        self.origin = origin
-        # ensure the direction is normalized to unity, i.e., cos^2 + sin^2 = 1
-        norm = np.sqrt(direction.x**2 + direction.y**2)
-        self.direction = Point(direction.x/norm, direction.y/norm)
-            
-    def __str__(self) :
-        return "Ray: r_0(%10.6f, %10.6f), d(%.6f %.6f) " % \
-               (self.origin.x, self.origin.y, self.direction.x, self.direction.y)
-
-class Node(object) :
+class Node:
 
     def contains(self, p) :
         """Does the node contain the point?"""
-        raise NotImplementedError
-
-    def intersections(self, r) :
-        """Where does the node intersect the ray?"""
         raise NotImplementedError
 
 class Primitive(Node) :
@@ -38,29 +22,17 @@ class Primitive(Node) :
         
     def contains(self, p) :
         return (self.surface.f(p) < 0) == self.sense
-        
-    def intersections(self, r) :
-        return self.surface.intersections(r)
-        
 
-class Operator(Node) :
+class Operator(Node):
     
     def __init__(self, L, R) :
         self.L, self.R = L, R
-        # some super checking algorithm
+        ### ADD YOUR CODE HERE ###
 
     def contains(self, p) :
         raise NotImplementedError
-
-    def intersections(self, r) :
-        # get intersections with left and right nodes
-        pointsL = self.L.intersections(r)
-        pointsR = self.R.intersections(r)
-        # return the concatenated result
-        return pointsL + pointsR
       
-# INSERT UNION AND INTERSECTION CLASSES
-class Union(Operator) :
+class Union(Operator):
     
     def __init__(self, L, R) :
         super(Union, self).__init__(L, R)
@@ -70,29 +42,32 @@ class Union(Operator) :
         inR = self.R.contains(p)
         return inL or inR
         
-        
-class Surface(object) :
+class Intersection(Operator):
+    ### ADD YOUR CODE HERE ###
+    pass 
+
+class Surface:
     
     def f(self, p) :
         raise NotImplementedError
         
-    def intersections(self, r) :
-        raise NotImplementedError
-        
-        
-class QuadraticSurface(Surface) :
+class QuadraticSurface(Surface):
     
     def __init__(self, A=0.0, B=0.0, C=0.0, D=0.0, E=0.0, F=0.0) :
+        ### ADD YOUR CODE HERE ###
         pass
     
-    def intersections(self, r) :
-        pass
-        
     def f(self, p) :
+        ### ADD YOUR CODE HERE ###
         pass
-               
 
-               
+class Circle(QuadraticSurface) :
+
+    def __init__(self, r, x0=0, y0=0) :
+        super(Circle, self).__init__(A=1, B=1, D=-2*x0, E=-2*y0, F=x0**2+y0**2-r**2)               
+  
+### ADD YOUR OTHER SURFACE CLASSES HERE ###
+
 class Region(object) :
     
     def __init__(self) :
@@ -108,29 +83,37 @@ class Region(object) :
             O = Union if operation == "U" else Intersection
             self.node = O(self.node, node)
           
-    def intersections(self, r) :
-        pass
-        
 class Geometry(object) :
     
     # Attributes can be defined in the body of a class.  However, these
     # become "static" values that are the same for every object of the class.
     # Hence, they can be accessed either through object.attribute or 
     # classname.attribute.
-    noregion = -1    
+    DEFAULT_REGION = -1    
     
     def __init__(self,  xmin, xmax, ymin, ymax) :
-        self.xmin, self.xmax, self.ymin, self.ymax = xmin, xmax, ymin, ymax
+        self.xmin, self.xmax = xmin, xmax
+        self.ymin, self.ymax = ymin, ymax
         self.regions = []
         
     def add_region(self, r) :
         self.regions.append(r)
 
     def find_region(self, p) :
-        region = Geometry.noregion
-        # look for the region containing p.
+        """ Find the region that contains the point.  If none 
+        is found, return Geometry.noregion.
+         
+        Arguments:
+            p : Point
+        Returns:
+            i : int
+        """
+
+        region = Geometry.DEFAULT_REGION
+        ### YOUR CODE HERE ###
         return region
         
     def plot(self, nx, ny) :
+        ### ADD YOUR CODE HERE ###
         pass
         

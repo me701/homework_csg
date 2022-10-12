@@ -119,7 +119,8 @@ of the `Operator`class:
 ## Problem 4 
 
 Now you have surfaces and nodes with which to 
-implement a `Region` class.  I've proposed the 
+implement a `Region` class.  In our context, a `Region` 
+represents a single *part* in SolidWorks and other CAD software.  I've proposed the 
 following definition:
 
 ```python
@@ -148,7 +149,7 @@ how we put all the surfaces and nodes together.  The
 key point is that `Region` has an attribute 
 `node` that represents at all times the top of 
 the tree of nodes and surfaces.  You should add 
-an appropriate `docstring` to explain what the method
+an appropriate docstring to explain what the method
 is doing, what the assertions are doing, etc.  In 
 other words, make it obvious that you know what
 *I'm* doing.  (This might seem like a silly exercise,
@@ -156,9 +157,11 @@ but the ability to digest and then add to code
 that someone else wrote is a good way to improve
 your own programming.) 
 
+**Deliverables**: Add the appropriate docstring.
+
 ## Problem 5
 
-Finally, consider the following {\tt Geometry} class:
+Finally, consider the following `Geometry` class:
 
 ```python
 class Geometry(object) :
@@ -183,9 +186,12 @@ class Geometry(object) :
         """
         pass
 
-    def plot(self, xmin, xmax, nx, ymin, ymax, ny) :
+    def plot(self, nx, ny) :
         pass
 ```
+
+A `Geometry` object is a collection of `Region` objects
+(i.e., like an *assembly* of *parts* in CAD speak).  
 
 Its construction requires a bounding box defined 
 by minimum and maximum values for $x$ and $y$, i.e.,
@@ -197,3 +203,5 @@ returns the index (in the list) of the region that
 contains the point.  If no region contains the point,
 or if the point lives outside the bounding box, return
 `Geometry.DEFAULT_REGION`. 
+
+Finally, the `plot` function should produce a `nx` by `ny` array of voxels over the bounding box such that each voxel value is equal to the region index at the center of the voxel.
